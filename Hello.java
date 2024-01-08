@@ -7,23 +7,27 @@ class Hello{
         List<Thread> threads = new ArrayList<>();
 
         Runnable statusReporter = () -> {
-            while(true){
-                printThreads(threads);
+            try {
+                while(true){                
+                    Thread.sleep(5000);                
+                    printThreads(threads);
+                }
+            } catch (InterruptedException e) {
+                System.out.println("Interrupted in catch block");
             }
         };
-
         Thread reporterThread = new Thread(statusReporter);
+        reporterThread.setDaemon(true);
         reporterThread.start();
 
         while (true) {
             Scanner sc = new Scanner(System.in);
             System.out.println("\n I can tell you the nth prime number. Enter n: ");
             int n = sc.nextInt();
-            if (n == 0) {
-                reporterThread.interrupt();
+
+            if (n == 0){
                 break;
             }
-
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
@@ -34,7 +38,6 @@ class Hello{
             };
             Thread t = new Thread(r);
             threads.add(t);
-            t.setDaemon(true);
             t.start();
         }
     }
@@ -46,7 +49,6 @@ class Hello{
         System.out.println("");
     }
 }
-
 class PrimeNumberUtil{
     public static int calculatePrime(int n) {
         int number;
