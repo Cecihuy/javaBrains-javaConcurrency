@@ -1,19 +1,35 @@
+import java.util.Scanner;
+
 class Hello{
     public static void main(String[] args) {
-        Runnable r = () -> System.out.println("I am running!");
-        Thread t = new Thread(r);
-        t.start();
-        
-        //or
-        new Thread(() -> System.out.println("I am running! in one line")).start();
-        
-        //or extends Thread in custom class
-        new MyThread().start();
+        int number;
+
+        while (true) {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("\n I can tell you the nth prime number. Enter n: ");
+            int n = sc.nextInt();
+            if (n == 0) break;
+            number = PrimeNumberUtil.calculatePrime(n);
+            System.out.println("\n Value of " + n + "th prime: " + number);
+        }
     }
 }
-class MyThread extends Thread{
-    @Override
-    public void run(){
-        System.out.println("I am running! from custom class extends Thread");
+class PrimeNumberUtil{
+    public static int calculatePrime(int n) {
+        int number;
+        int numberOfPrimesFound;
+        int i;        
+        number = 1;
+        numberOfPrimesFound = 0;
+
+        while (numberOfPrimesFound < n){
+            number++;            
+            for (i = 2; i <= number && number % i != 0; i++) {
+            }
+            if (i == number) {
+                numberOfPrimesFound++;
+            }
+        }
+        return number;
     }
 }
