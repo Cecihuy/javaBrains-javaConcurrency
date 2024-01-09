@@ -13,7 +13,7 @@ class Hello{
                     printThreads(threads);
                 }
             } catch (InterruptedException e) {
-                System.out.println("Interrupted in catch block");
+                System.out.println("Status report thread interrupted. Ending status updates...");
             }
         };
         Thread reporterThread = new Thread(statusReporter);
@@ -26,6 +26,14 @@ class Hello{
             int n = sc.nextInt();
 
             if (n == 0){
+                reporterThread.interrupt();
+                try{
+                    System.out.println("Waiting for all threads to finish");
+                    waitForThreads(threads);
+                    System.out.println("Done with the application. " + threads.size() + " primes");
+                } catch (InterruptedException e){
+                    System.out.println("\n Got interrupted when waiting for threads. Quitting");
+                }
                 break;
             }
             Runnable r = new Runnable() {
@@ -39,6 +47,11 @@ class Hello{
             Thread t = new Thread(r);
             threads.add(t);
             t.start();
+        }
+    }
+    private static void waitForThreads(List<Thread> threads) throws InterruptedException{
+        for(Thread thread : threads){
+            thread.join();
         }
     }
     private static void printThreads(List<Thread> threads) {
